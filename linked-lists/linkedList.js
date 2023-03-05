@@ -44,6 +44,45 @@ class LinkedList {
 
         return pointer;
     }
+
+    at(index) {
+        if (index >= this.length) {
+            return "Invalid Index";
+        }
+
+        let i = 0;
+
+        let pointer = this.listHead;
+
+        while (i < index) {
+            pointer = pointer.nextNode;
+            i += 1;
+        }
+
+        return pointer;
+    }
+
+    pop() {
+        if (this.length === 0) {
+            return;
+        }
+
+        let pointer = this.listHead;
+        let previousNode;
+
+        while (pointer.nextNode !== null) {
+            previousNode = pointer;
+            pointer = pointer.nextNode;
+        }
+
+        previousNode.nextNode = null;
+
+        if (this.length === 1) {
+            this.listHead = null;
+        }
+
+        this.length -= 1;
+    }
 }
 
 const nodeFactory = (value = null, nextNode = null) => {
@@ -54,6 +93,9 @@ let list = new LinkedList();
 list.append(5);
 list.append("test");
 list.prepend("first");
+list.append(8);
+list.append("last");
 console.log(list.size());
 console.log(list.head());
 console.log(list.tail());
+console.log(list.at(2));
