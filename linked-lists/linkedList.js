@@ -83,6 +83,34 @@ class LinkedList {
 
         this.length -= 1;
     }
+
+    contains(value) {
+        let pointer = this.listHead;
+
+        if (pointer.value === value) return true;
+
+        while (pointer.nextNode !== null) {
+            pointer = pointer.nextNode;
+            if (pointer.value === value) return true;
+        }
+
+        return pointer.value === value ? true : false;
+    }
+
+    find(value) {
+        let pointer = this.listHead;
+        let index = 0;
+
+        if (pointer.value === value) return index;
+
+        while (pointer.nextNode !== null) {
+            pointer = pointer.nextNode;
+            index += 1;
+            if (pointer.value === value) return index;
+        }
+
+        return pointer.value === value ? true : null;
+    }
 }
 
 const nodeFactory = (value = null, nextNode = null) => {
