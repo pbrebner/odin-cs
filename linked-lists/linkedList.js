@@ -46,7 +46,7 @@ class LinkedList {
     }
 
     at(index) {
-        if (index >= this.length) {
+        if (index >= this.length || index < 0) {
             return "Invalid Index";
         }
 
@@ -111,6 +111,72 @@ class LinkedList {
 
         return pointer.value === value ? true : null;
     }
+
+    toString() {
+        let pointer = this.listHead;
+        let outputString = `( ${pointer.value} )`;
+
+        while (pointer.nextNode !== null) {
+            pointer = pointer.nextNode;
+            outputString = `${outputString} -> ( ${pointer.value} )`;
+        }
+
+        return outputString;
+    }
+
+    insertAt(value, index) {
+        if (index >= this.length || index < 0) {
+            return "Index out of range";
+        }
+
+        let newNode = nodeFactory(value);
+        this.length += 1;
+
+        if (index === 0) {
+            newNode.nextNode = this.listHead;
+            this.listHead = newNode;
+            return;
+        }
+
+        let previousNode;
+        let pointer = this.listHead;
+        let i = 0;
+
+        while (pointer.nextNode !== null) {
+            previousNode = pointer;
+            pointer = pointer.nextNode;
+            i = +1;
+            if (index === i) {
+                newNode.nextNode = pointer;
+                previousNode.nextNode = newNode;
+            }
+        }
+    }
+
+    removeAt(index) {
+        if (!this.listHead) return "Empty list";
+        if (index >= this.length || index < 0) {
+            return "Index out of range";
+        }
+
+        let previousNode;
+        let pointer = this.listHead;
+        let i = 0;
+
+        if (index === 0) {
+            this.listHead = pointer.nextNode;
+            return;
+        }
+
+        while (pointer.nextNode !== null) {
+            previousNode = pointer;
+            pointer = pointer.nextNode;
+            i += 1;
+            if (index === i) {
+                previousNode.nextNode = pointer.nextNode;
+            }
+        }
+    }
 }
 
 const nodeFactory = (value = null, nextNode = null) => {
@@ -127,3 +193,5 @@ console.log(list.size());
 console.log(list.head());
 console.log(list.tail());
 console.log(list.at(2));
+
+console.log(list.toString());
