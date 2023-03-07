@@ -43,7 +43,6 @@ class Tree {
                         j += 1;
                     }
                 }
-            console.log(sortedArray);
             return sortedArray;
         }
     }
@@ -251,11 +250,17 @@ class Tree {
         // Rebalances the tree with the option to re-sort
         if (this.isBalanced()) return;
 
-        const array = this.inorder(this.root);
+        this.array = this.inorder();
         if (sort) {
-            array = this.mergeSort(array);
+            this.sortedArray = this.mergeSort(this.array);
+            this.root = this.buildTree(
+                this.sortedArray,
+                0,
+                this.sortedArray.length - 1
+            );
+        } else {
+            this.root = this.buildTree(this.array, 0, this.array.length - 1);
         }
-        this.root = this.buildTree(this.array, 0, this.array.length - 1);
     }
 }
 
@@ -278,13 +283,53 @@ let testArray = [1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 324];
 let tree = new Tree(testArray);
 
 //tree.insert(80);
-console.log(tree.find(324));
-console.log(tree.levelOrder());
-console.log(tree.inorder());
-console.log(tree.preorder());
-console.log(tree.postorder());
-console.log(tree.height(tree.find(3)));
-console.log(tree.depth(tree.find(3)));
-console.log(tree.isBalanced());
+//console.log(tree.find(324));
+//console.log(tree.levelOrder());
+//console.log(tree.inorder());
+//console.log(tree.preorder());
+//console.log(tree.postorder());
+//console.log(tree.height(tree.find(3)));
+//console.log(tree.depth(tree.find(3)));
+//console.log(tree.isBalanced());
 
-prettyPrint(tree.root);
+//prettyPrint(tree.root);
+
+function driverScript(arraySize = 15) {
+    const array = [];
+
+    for (let i = 0; i < arraySize; i++) {
+        array.push(Math.round(Math.random() * 100));
+    }
+
+    let tree = new Tree(array);
+    prettyPrint(tree.root);
+
+    console.log("Balanced: ", tree.isBalanced());
+
+    console.log("Level, pre, post, and inorder");
+    console.log(tree.levelOrder());
+    console.log(tree.preorder());
+    console.log(tree.postorder());
+    console.log(tree.inorder());
+
+    tree.insert(450);
+    tree.insert(600);
+    tree.insert(214);
+    tree.insert(750);
+
+    console.log("Balanced: ", tree.isBalanced());
+    console.log("Rebalancing...");
+    tree.rebalance(true);
+
+    console.log("Balanced: ", tree.isBalanced());
+
+    console.log("Level, pre, post, and inorder");
+    console.log(tree.levelOrder());
+    console.log(tree.preorder());
+    console.log(tree.postorder());
+    console.log(tree.inorder());
+
+    prettyPrint(tree.root);
+}
+
+driverScript(20);
