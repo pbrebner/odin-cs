@@ -112,6 +112,7 @@ class Tree {
     }
 
     minRoot(root) {
+        // finds minimum root below provide root
         let min = root.value;
         while (root.left != null) {
             min = root.left.value;
@@ -120,7 +121,17 @@ class Tree {
         return min;
     }
 
-    find() {}
+    find(value, root = this.root) {
+        if (root == null) {
+            return "Value not in Tree";
+        } else if (value === root.value) {
+            return root;
+        } else if (value < root.value) {
+            return this.find(value, root.left);
+        } else if (value > root.value) {
+            return this.find(value, root.right);
+        }
+    }
 }
 
 const nodeFactory = (value = null, left = null, right = null) => {
@@ -141,6 +152,7 @@ let testArray = [1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 324];
 let tree = new Tree([1, 50, 4, 30, 40]);
 
 tree.insert(80);
-tree.delete(30);
+let node = tree.find(50);
+console.log(node);
 
 prettyPrint(tree.root);
