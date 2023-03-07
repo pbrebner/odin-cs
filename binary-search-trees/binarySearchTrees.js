@@ -191,6 +191,35 @@ class Tree {
 
         if (!callback) return result;
     }
+
+    height(node = this.root) {
+        // longest distance from node to leaf node below
+        if (node === null) return -1;
+        const leftHeight = this.height(node.left);
+        const rightHeight = this.height(node.right);
+        return Math.max(leftHeight, rightHeight) + 1;
+    }
+
+    depth(node) {
+        // Distance from node to root node
+        let root = this.root;
+        if (node === root) return 0;
+
+        let distance = 0;
+        while (root != null) {
+            if (node.value < root.value) {
+                root = root.left;
+                distance += 1;
+            } else if (node.value > root.value) {
+                root = root.right;
+                distance += 1;
+            } else {
+                return distance;
+            }
+        }
+
+        return "Node not in Tree";
+    }
 }
 
 const nodeFactory = (value = null, left = null, right = null) => {
@@ -208,13 +237,15 @@ const prettyPrint = (node, prefix = "", isLeft = true) => {
 };
 
 let testArray = [1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 324];
-let tree = new Tree([1, 50, 4, 30, 40]);
+let tree = new Tree(testArray);
 
 tree.insert(80);
-console.log(tree.find(50));
+console.log(tree.find(324));
 console.log(tree.levelOrder());
 console.log(tree.inorder());
 console.log(tree.preorder());
 console.log(tree.postorder());
+console.log(tree.height(tree.find(3)));
+console.log(tree.depth(tree.find(3)));
 
 prettyPrint(tree.root);
