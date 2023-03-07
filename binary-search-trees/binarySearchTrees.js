@@ -132,6 +132,65 @@ class Tree {
             return this.find(value, root.right);
         }
     }
+
+    levelOrder(callback) {
+        if (!this.root) return [];
+        let queue = [this.root];
+        const result = [];
+        while (queue.length > 0) {
+            let node = queue.shift();
+            result.push(node.value);
+            if (node.left) {
+                queue.push(node.left);
+            }
+            if (node.right) {
+                queue.push(node.right);
+            }
+            if (callback) return callback(node);
+        }
+        if (!callback) return result;
+    }
+
+    inorder(callback, root = this.root, result = []) {
+        if (root == null) return;
+        // Left, Data, Right
+        if (root != null) {
+            this.inorder(callback, root.left, result);
+            result.push(root.value);
+            this.inorder(callback, root.right, result);
+            if (callback) callback(root);
+        }
+
+        if (!callback) return result;
+    }
+
+    preorder(callback, root = this.root, result = []) {
+        if (!this.root) return [];
+        // Data, Left, Right
+
+        if (root != null) {
+            result.push(root.value);
+            this.preorder(callback, root.left, result);
+            this.preorder(callback, root.right, result);
+            if (callback) callback(root);
+        }
+
+        if (!callback) return result;
+    }
+
+    postorder(callback, root = this.root, result = []) {
+        if (!this.root) return [];
+        // Left, Right, Data
+
+        if (root != null) {
+            this.postorder(callback, root.left, result);
+            this.postorder(callback, root.right, result);
+            result.push(root.value);
+            if (callback) callback(root);
+        }
+
+        if (!callback) return result;
+    }
 }
 
 const nodeFactory = (value = null, left = null, right = null) => {
@@ -152,7 +211,10 @@ let testArray = [1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 324];
 let tree = new Tree([1, 50, 4, 30, 40]);
 
 tree.insert(80);
-let node = tree.find(50);
-console.log(node);
+console.log(tree.find(50));
+console.log(tree.levelOrder());
+console.log(tree.inorder());
+console.log(tree.preorder());
+console.log(tree.postorder());
 
 prettyPrint(tree.root);
