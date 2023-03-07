@@ -54,30 +54,93 @@ class Tree {
         }
 
         let mid = Math.ceil((start + end) / 2);
-        let newNode = nodeFactory(array[mid]);
+        let root = nodeFactory(array[mid]);
 
-        newNode.left = this.buildTree(array, start, mid - 1);
-        newNode.right = this.buildTree(array, mid + 1, end);
+        root.left = this.buildTree(array, start, mid - 1);
+        root.right = this.buildTree(array, mid + 1, end);
 
-        return newNode;
+        return root;
     }
+
+    insert(value) {
+        this.root = this.insertRec(this.root, value);
+    }
+
+    insertRec(root, value) {
+        if (root == null) {
+            root = nodeFactory(value);
+            return root;
+        } else if (value < root.value) {
+            root.left = this.insertRec(root.left, value);
+        } else if (value > root.value) {
+            root.right = this.insertRec(root.right, value);
+        }
+
+        return root;
+    }
+
+    delete(value) {
+        this.root = this.deleteRec(this.root, value);
+    }
+
+    deleteRec(root, value) {
+        if (root == null) {
+            return root;
+        }
+
+        if (value < root.value) {
+            root.left = this.deleteRec(root.left, value);
+        } else if (value > root.value) {
+            root.right = this.deleteRec(root.right, value);
+        } else {
+            if (root.left == null) {
+                return root.right;
+            } else if (root.right == null) {
+                return root.left;
+            }
+
+            // node with two children: Get the inorder
+            // successor (smallest in the right subtree)
+            // and set value to root's value
+            root.value = this.minRoot(root.right);
+
+            //delete inorder successor
+            root.right = this.deleteRec(root.right, root.value);
+        }
+
+        return root;
+    }
+
+    minRoot(root) {
+        let min = root.value;
+        while (root.left != null) {
+            min = root.left.value;
+            root = root.left;
+        }
+        return min;
+    }
+
+    find() {}
 }
 
-const nodeFactory = (data, left = null, right = null) => {
-    return { data, left, right };
+const nodeFactory = (value = null, left = null, right = null) => {
+    return { value, left, right };
 };
 
 const prettyPrint = (node, prefix = "", isLeft = true) => {
     if (node.right !== null) {
         prettyPrint(node.right, `${prefix}${isLeft ? "│   " : "    "}`, false);
     }
-    console.log(`${prefix}${isLeft ? "└── " : "┌── "}${node.data}`);
+    console.log(`${prefix}${isLeft ? "└── " : "┌── "}${node.value}`);
     if (node.left !== null) {
         prettyPrint(node.left, `${prefix}${isLeft ? "    " : "│   "}`, true);
     }
 };
 
 let testArray = [1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 324];
-let tree = new Tree(testArray);
+let tree = new Tree([1, 50, 4, 30, 40]);
+
+tree.insert(80);
+tree.delete(30);
 
 prettyPrint(tree.root);
