@@ -220,6 +220,43 @@ class Tree {
 
         return "Node not in Tree";
     }
+
+    isBalanced() {
+        // Checks if tree is balanced;
+        // Difference between height of left tree and right tree of each node is less than 1
+        if (this.root == null) return "No Tree";
+
+        const queue = [this.root];
+
+        while (queue.length > 0) {
+            const current = queue.shift();
+            if (
+                Math.abs(
+                    this.height(current.left) - this.height(current.right)
+                ) > 1
+            ) {
+                return false;
+            }
+
+            // If current node has children, add them to queue
+            if (current.left != null) queue.push(current.left);
+            if (current.right != null) queue.push(current.right);
+        }
+
+        // If never false, must be balanced
+        return true;
+    }
+
+    rebalance(sort = false) {
+        // Rebalances the tree with the option to re-sort
+        if (this.isBalanced()) return;
+
+        const array = this.inorder(this.root);
+        if (sort) {
+            array = this.mergeSort(array);
+        }
+        this.root = this.buildTree(this.array, 0, this.array.length - 1);
+    }
 }
 
 const nodeFactory = (value = null, left = null, right = null) => {
@@ -236,10 +273,11 @@ const prettyPrint = (node, prefix = "", isLeft = true) => {
     }
 };
 
+// Testing
 let testArray = [1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 324];
 let tree = new Tree(testArray);
 
-tree.insert(80);
+//tree.insert(80);
 console.log(tree.find(324));
 console.log(tree.levelOrder());
 console.log(tree.inorder());
@@ -247,5 +285,6 @@ console.log(tree.preorder());
 console.log(tree.postorder());
 console.log(tree.height(tree.find(3)));
 console.log(tree.depth(tree.find(3)));
+console.log(tree.isBalanced());
 
 prettyPrint(tree.root);
