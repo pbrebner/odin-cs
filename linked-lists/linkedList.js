@@ -67,6 +67,12 @@ class LinkedList {
             return;
         }
 
+        if (this.length === 1) {
+            this.listHead = null;
+            this.length -= 1;
+            return;
+        }
+
         let pointer = this.listHead;
         let previousNode;
 
@@ -76,11 +82,6 @@ class LinkedList {
         }
 
         previousNode.nextNode = null;
-
-        if (this.length === 1) {
-            this.listHead = null;
-        }
-
         this.length -= 1;
     }
 
@@ -109,7 +110,7 @@ class LinkedList {
             if (pointer.value === value) return index;
         }
 
-        return pointer.value === value ? true : null;
+        return pointer.value === value ? index : null;
     }
 
     toString() {
@@ -121,7 +122,7 @@ class LinkedList {
             outputString = `${outputString} -> ( ${pointer.value} )`;
         }
 
-        return outputString;
+        return `${outputString} -> null`;
     }
 
     insertAt(value, index) {
