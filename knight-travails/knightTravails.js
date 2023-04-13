@@ -16,17 +16,19 @@ class GameBoard {
         [1, 2],
     ];
 
+    // Represent the graph as an Adjancency List (With nested indexes)
     makeGraph() {
         let newGraph = [];
 
         for (let i = 0; i <= 7; i++) {
+            newGraph[i] = [];
             for (let j = 0; j <= 7; j++)
                 newGraph[i][j] = this.getGraphMove([i, j]);
         }
-
         return newGraph;
     }
 
+    //Based on current position, get all moves available
     getGraphMove(pos) {
         let moves = [];
 
@@ -38,15 +40,56 @@ class GameBoard {
                 moves.push([newX, newY]);
             }
         });
+
+        return moves;
     }
 }
 
-function NodeFactory(pos, path) {
-    return { pos, path };
+function NodeFactory(pos, pathTaken) {
+    return { pos, pathTaken };
 }
 
 class Knight {
-    constructor() {}
+    constructor(graph) {
+        this.graph = graph;
+    }
 
-    knightMoves() {}
+    knightMoves(start, end) {
+        // Find shortest path using breadth first search
+        let queue = [];
+        let pathTaken = [start];
+
+        let currentNode = NodeFactory(start, pathTaken);
+
+        // WHile not at end position, go through each move available at current position,
+        // create new node with move as posiiton, and add to queue
+        while (currentNode.pos[0] !== end[0] || currentNode.pos[1] !== end[1]) {
+            this.graph[currentNode.pos[0]][currentNode.pos[1]].forEach(
+                (move) => {
+                    let newNode = NodeFactory(
+                        move,
+                        currentNode.pathTaken.concat([move])
+                    );
+                    queue.push(newNode);
+                }
+            );
+
+            currentNode = queue.shift();
+        }
+
+        // Print out the results
+        console.log(
+            `=> You made it in ${
+                currentNode.pathTaken.length - 1
+            } moves! Here's your path:`
+        );
+        currentNode.pathTaken.forEach((path) => {
+            console.log(path);
+        });
+    }
 }
+
+const board = new GameBoard();
+const knight = new Knight(board.graph);
+
+knight.knightMoves([3, 3], [4, 3]);
