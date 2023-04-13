@@ -55,6 +55,28 @@ class Knight {
     }
 
     knightMoves(start, end) {
+        if (
+            !Array.isArray(start) ||
+            !Array.isArray(end) ||
+            start.length !== 2 ||
+            end.length !== 2
+        ) {
+            console.log(
+                "ERROR: Must provide an array of length 2 for both start and end with values from 0 to 7"
+            );
+            return;
+        }
+
+        if (start[0] < 0 || start[0] > 7 || start[1] < 0 || start[1] > 7) {
+            console.log("ERROR: Start array values must be from 0 to 7");
+            return;
+        }
+
+        if (end[0] < 0 || end[0] > 7 || end[1] < 0 || end[1] > 7) {
+            console.log("ERROR: End array values must be from 0 to 7");
+            return;
+        }
+
         // Find shortest path using breadth first search
         let queue = [];
         let pathTaken = [start];
