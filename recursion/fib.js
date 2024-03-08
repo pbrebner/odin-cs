@@ -1,29 +1,34 @@
 // Fibonacci Practice
 
 function fibs(num) {
-    let fibArray = [0, 1];
+    let fibArray = [];
 
-    for (let i = 2; i < num; i++) {
-        fibArray[i] = fibArray[i - 1] + fibArray[i - 2];
+    if (num == 1) {
+        fibArray = [0];
+    } else if (num == 2) {
+        fibArray = [0, 1];
+    } else if (num > 2) {
+        fibArray = [0, 1];
+        for (let i = 2; i < num; i++) {
+            fibArray[i] = fibArray[i - 1] + fibArray[i - 2];
+        }
     }
 
     return fibArray;
 }
 
 function fibsRec(num) {
-    if (num < 2) {
-        return [0, 1];
+    if (num <= 1) {
+        return num;
     } else {
-        let fibArray = fibsRec(num - 1);
-        fibArray.push(
-            fibArray[fibArray.length - 1] + fibArray[fibArray.length - 2]
-        );
-        return fibArray;
+        return fibsRec(num - 1) + fibsRec(num - 2);
     }
 }
 
-let arr = fibs(7);
-let arrRecursive = fibsRec(1);
-
+let arr = fibs(8);
 console.log(arr);
-console.log(arrRecursive);
+
+let n = 8;
+for (let i = 0; i < n; i++) {
+    console.log(fibsRec(i));
+}
