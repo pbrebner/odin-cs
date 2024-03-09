@@ -1,4 +1,4 @@
-import { LinkedList } from "./linkedList";
+const { LinkedList } = require("./linkedList");
 
 class HashMap {
     capacity = 16;
@@ -42,14 +42,14 @@ class HashMap {
         let index = hashCode % this.capacity;
 
         // Check if index is within bucket
-        if (index < 0 || index >= buckets.length) {
+        if (index < 0 || index >= this.buckets.length) {
             throw new Error("Trying to access index out of bound");
         }
 
         if (!this.buckets[index]) {
             // Create linked list, with value as head node, and add to bucket array
             let list = new LinkedList();
-            list.append({ key: value });
+            list.append({ [key]: value });
 
             this.buckets[index] = list;
         } else {
@@ -59,9 +59,9 @@ class HashMap {
             const listAtBucketIndex = this.buckets[index];
             if (listAtBucketIndex.containsKey(key)) {
                 let listIndex = listAtBucketIndex.findKey(key);
-                listAtBucketIndex.replaceValue({ key, value }, listIndex);
+                listAtBucketIndex.replaceValue({ [key]: value }, listIndex);
             } else {
-                listAtBucketIndex.append({ key, value });
+                listAtBucketIndex.append({ [key]: value });
             }
         }
     }
@@ -71,7 +71,7 @@ class HashMap {
         let index = hashCode % this.capacity;
 
         // Check if index is within bucket
-        if (index < 0 || index >= buckets.length) {
+        if (index < 0 || index >= this.buckets.length) {
             throw new Error("Trying to access index out of bound");
         }
 
@@ -81,8 +81,8 @@ class HashMap {
             const listAtBucketIndex = this.buckets[index];
             if (listAtBucketIndex.containsKey(key)) {
                 let listIndex = listAtBucketIndex.findKey(key);
-                let value = listAtBucketIndex.at(listIndex);
-                return value[key];
+                let node = listAtBucketIndex.at(listIndex);
+                return node.value[key];
             } else {
                 return null;
             }
@@ -94,7 +94,7 @@ class HashMap {
         let index = hashCode % this.capacity;
 
         // Check if index is within bucket
-        if (index < 0 || index >= buckets.length) {
+        if (index < 0 || index >= this.buckets.length) {
             throw new Error("Trying to access index out of bound");
         }
 
@@ -115,7 +115,7 @@ class HashMap {
         let index = hashCode % this.capacity;
 
         // Check if index is within bucket
-        if (index < 0 || index >= buckets.length) {
+        if (index < 0 || index >= this.buckets.length) {
             throw new Error("Trying to access index out of bound");
         }
 
@@ -156,8 +156,8 @@ class HashMap {
             if (element) {
                 let size = element.size();
                 for (let i = 0; i < size; i++) {
-                    let value = element.at(i);
-                    keys.concat(Object.keys(value)[0]);
+                    let node = element.at(i);
+                    keys.push(Object.keys(node.value)[0]);
                 }
             }
         });
@@ -172,8 +172,8 @@ class HashMap {
             if (element) {
                 let size = element.size();
                 for (let i = 0; i < size; i++) {
-                    let value = element.at(i);
-                    values.concat(Object.values(value)[0]);
+                    let node = element.at(i);
+                    values.push(Object.values(node.value)[0]);
                 }
             }
         });
@@ -188,8 +188,8 @@ class HashMap {
             if (element) {
                 let size = element.size();
                 for (let i = 0; i < size; i++) {
-                    let value = element.at(i);
-                    entries.concat(value);
+                    let node = element.at(i);
+                    entries.push(node.value);
                 }
             }
         });
@@ -199,3 +199,11 @@ class HashMap {
 }
 
 const hashMap = new HashMap();
+hashMap.set("Carla", "Smith");
+hashMap.set("Carla", "Brenner");
+hashMap.set("Jess", "Liv");
+console.log(hashMap.get("Carla"));
+console.log(hashMap.has("Carlos"));
+console.log(hashMap.length());
+
+console.log(hashMap.entries());
