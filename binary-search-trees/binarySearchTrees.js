@@ -145,7 +145,7 @@ class Tree {
             if (node.right) {
                 queue.push(node.right);
             }
-            if (callback) return callback(node);
+            if (callback) callback(node);
         }
         if (!callback) return result;
     }
